@@ -3,14 +3,19 @@ module github.com/go-shiori/shiori
 go 1.12
 
 require (
+	github.com/BurntSushi/toml v0.3.1
 	github.com/PuerkitoBio/goquery v1.5.0
 	github.com/disintegration/imaging v1.6.0
 	github.com/fatih/color v1.7.0
+	github.com/go-ldap/ldap v3.0.3+incompatible
+	github.com/go-playground/locales v0.12.1 // indirect
+	github.com/go-playground/universal-translator v0.16.0 // indirect
 	github.com/go-shiori/go-readability v0.0.0-20190809152430-5413e9c4ec86
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/gofrs/uuid v3.2.0+incompatible
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/julienschmidt/httprouter v1.2.0
+	github.com/leodido/go-urn v1.1.0 // indirect
 	github.com/lib/pq v1.1.1 // indirect
 	github.com/mattn/go-colorable v0.1.1 // indirect
 	github.com/mattn/go-isatty v0.0.7 // indirect
@@ -29,4 +34,7 @@ require (
 	golang.org/x/sys v0.0.0-20190804053845-51ab0e2deafa // indirect
 	golang.org/x/tools v0.0.0-20190809145639-6d4652c779c4 // indirect
 	google.golang.org/appengine v1.6.1 // indirect
+	gopkg.in/asn1-ber.v1 v1.0.0-20181015200546-f715ec2f112d // indirect
+	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
+	gopkg.in/go-playground/validator.v9 v9.29.1
 )

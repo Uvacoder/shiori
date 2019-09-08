@@ -77,43 +77,15 @@ func (h *handler) apiLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 		checkError(err)
 	}
 
-	// Check if user's database is empty or there are no owner.
-	// If yes, and user uses default account, let him in.
-	searchOptions := database.GetAccountsOptions{
-		Owner: true,
-	}
-
-	accounts, err := h.DB.GetAccounts(searchOptions)
+	// Authenticate login request
+	account, err := h.authUser(request.Username, request.Password, request.Owner)
 	checkError(err)
-
-	if len(accounts) == 0 && request.Username == "shiori" && request.Password == "gopher" {
-		genSession(model.Account{
-			Username: "shiori",
-			Owner:    true,
-		}, time.Hour)
-		return
-	}
-
-	// Get account data from database
-	account, exist := h.DB.GetAccount(request.Username)
-	if !exist {
-		panic(fmt.Errorf("username doesn't exist"))
-	}
-
-	// Compare password with database
-	err = bcrypt.CompareHashAndPassword([]byte(account.Password), []byte(request.Password))
-	if err != nil {
-		panic(fmt.Errorf("username and password don't match"))
-	}
-
-	// If login request is as owner, make sure this account is owner
-	if request.Owner && !account.Owner {
-		panic(fmt.Errorf("account level is not sufficient as owner"))
-	}
 
 	// Calculate expiration time
 	expTime := time.Hour
-	if request.Remember > 0 {
+	if account.ID == -1 {
+		expTime = 1
+	} else if request.Remember > 0 {
 		expTime = time.Duration(request.Remember) * time.Hour
 	} else {
 		expTime = -1

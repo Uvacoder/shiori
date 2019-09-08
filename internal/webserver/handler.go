@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-shiori/shiori/internal/database"
+	"github.com/go-shiori/shiori/internal/ldap"
 	cch "github.com/patrickmn/go-cache"
 )
 
@@ -17,6 +18,7 @@ type handler struct {
 	UserCache    *cch.Cache
 	SessionCache *cch.Cache
 	ArchiveCache *cch.Cache
+	LDAPClient   *ldap.Client
 }
 
 // prepareLoginCache prepares login cache for future use

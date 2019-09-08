@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/go-shiori/shiori/internal/database"
+	"github.com/go-shiori/shiori/internal/ldap"
 	"github.com/go-shiori/shiori/pkg/warc"
 	"github.com/julienschmidt/httprouter"
 	cch "github.com/patrickmn/go-cache"
@@ -14,15 +15,25 @@ import (
 
 var httpClient = &http.Client{Timeout: time.Minute}
 
+// Options is options for the server
+type Options struct {
+	DB         database.DB
+	DataDir    string
+	Address    string
+	Port       int
+	LDAPClient *ldap.Client
+}
+
 // ServeApp serves wb interface in specified port
-func ServeApp(DB database.DB, dataDir string, address string, port int) error {
+func ServeApp(opts Options) error {
 	// Create handler
 	hdl := handler{
-		DB:           DB,
-		DataDir:      dataDir,
+		DB:           opts.DB,
+		DataDir:      opts.DataDir,
 		UserCache:    cch.New(time.Hour, 10*time.Minute),
 		SessionCache: cch.New(time.Hour, 10*time.Minute),
 		ArchiveCache: cch.New(time.Minute, 5*time.Minute),
+		LDAPClient:   opts.LDAPClient,
 	}
 
 	hdl.ArchiveCache.OnEvicted(func(key string, data interface{}) {
@@ -68,7 +79,7 @@ func ServeApp(DB database.DB, dataDir string, address string, port int) error {
 	}
 
 	// Create server
-	url := fmt.Sprintf("%s:%d", address, port)
+	url := fmt.Sprintf("%s:%d", opts.Address, opts.Port)
 	svr := &http.Server{
 		Addr:         url,
 		Handler:      router,
