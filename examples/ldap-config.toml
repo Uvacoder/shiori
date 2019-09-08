@@ -1,0 +1,27 @@
+version = 1 # config version
+
+host = "ldap.example.org"
+port = 389
+
+[tls]
+enabled = true
+skipCertVerification = false
+trustedCertificates = [
+    "/srv/shiori/certs/ca.pem",
+    "/srv/shiori/certs/server.pem"
+]
+
+[bind]
+userDN = "cn=svcuser,ou=users,dc=example,dc=org"
+password = "PASSWORD"
+
+[search]
+# filter: Availlable search variables are Group and Login, 
+# Group is replaced by ownerGroupDN and then visitorGroupDN.
+# Login is the provided Login.
+# If a user match a owner, visitor will not be searched.
+base = "ou=users,dc=example,dc=org"
+filter = "(&(memberOf={{.Group}})(|(mail={{.Login}})(sAMAccountName={{.Login}})))"
+ownerGroupDN = "cn=shiori_owners,ou=group,dc=example,dc=org"
+visitorGroupDN = "cn=shiori_visitors,ou=group,dc=example,dc=org"
+loginField = "sAMAccountName"
