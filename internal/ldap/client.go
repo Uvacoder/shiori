@@ -47,6 +47,11 @@ func NewClient(cfg Config) (*Client, error) {
 	return client, nil
 }
 
+// Close closes client connection to LDAP server
+func (cl *Client) Close() {
+	cl.conn.Close()
+}
+
 // Search searches for a username in LDAP server
 func (cl *Client) Search(username string, owner bool) (string, string, error) {
 	loginField := cl.Config.Search.LoginField

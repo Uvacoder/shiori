@@ -47,6 +47,7 @@ func serveHandler(cmd *cobra.Command, args []string) {
 		if err != nil {
 			logrus.Fatalf("Failed to create LDAP client: %v\n", err)
 		}
+		defer options.LDAPClient.Close()
 	}
 
 	err := webserver.ServeApp(options)
