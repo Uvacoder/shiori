@@ -3,7 +3,5 @@
 *.toml
 
 # Exclude executable file
-/shiori*
-
-# Exclude development data
-/dev-data
+/shiori
+/shiori-dev
