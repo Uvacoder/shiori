@@ -9,7 +9,6 @@ RUN go build
 FROM golang:alpine
 COPY --from=builder /src/shiori /usr/local/bin/
 
-ARG PORT
 ARG PGHOST
 ARG PGPORT
 ARG PGUSER
@@ -23,5 +22,5 @@ ENV SHIORI_PG_NAME $PGDATABASE
 ENV SHIORI_PG_HOST $PGHOST
 ENV SHIORI_PG_PORT $PGPORT
 
-EXPOSE $PORT
+EXPOSE 8080
 CMD ["/usr/local/bin/shiori", "serve"]
